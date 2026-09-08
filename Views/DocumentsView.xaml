@@ -1,0 +1,93 @@
+<UserControl x:Class="HR_ERP.Views.DocumentsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBlock x:Name="TitleText" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,20,0"/>
+            <Button x:Name="ImportButton" Click="Import_Click" Background="#2ECC71" Foreground="White"/>
+            <Button x:Name="SortButton" Click="SortButton_Click" Margin="10,0,0,0">
+                <Button.ContextMenu>
+                    <ContextMenu x:Name="SortMenu" Placement="Bottom">
+                        <MenuItem x:Name="SortNameAscItem" Click="SortMenuItem_Click" Tag="NameAsc" IsCheckable="True"/>
+                        <MenuItem x:Name="SortNameDescItem" Click="SortMenuItem_Click" Tag="NameDesc" IsCheckable="True"/>
+                        <Separator/>
+                        <MenuItem x:Name="SortDateNewestItem" Click="SortMenuItem_Click" Tag="DateNewest" IsCheckable="True"/>
+                        <MenuItem x:Name="SortDateOldestItem" Click="SortMenuItem_Click" Tag="DateOldest" IsCheckable="True"/>
+                        <Separator/>
+                        <MenuItem x:Name="SortSizeLargestItem" Click="SortMenuItem_Click" Tag="SizeLargest" IsCheckable="True"/>
+                        <MenuItem x:Name="SortSizeSmallestItem" Click="SortMenuItem_Click" Tag="SizeSmallest" IsCheckable="True"/>
+                        <Separator/>
+                        <MenuItem x:Name="SortTypeItem" Click="SortMenuItem_Click" Tag="Type" IsCheckable="True"/>
+                    </ContextMenu>
+                </Button.ContextMenu>
+            </Button>
+            <Label x:Name="IconSizeLabel" VerticalAlignment="Center" Margin="24,0,0,0"/>
+            <Slider x:Name="IconSizeSlider" Minimum="60" Maximum="200" Value="100" Width="140"
+                    VerticalAlignment="Center" ValueChanged="IconSizeSlider_ValueChanged"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+            <RadioButton x:Name="FilterAllRadio" GroupName="CategoryFilter" IsChecked="True"
+                         Checked="Filter_Changed" VerticalAlignment="Center" Margin="0,0,18,0"/>
+            <RadioButton x:Name="FilterImportantRadio" GroupName="CategoryFilter"
+                         Checked="Filter_Changed" VerticalAlignment="Center" Margin="0,0,18,0"/>
+            <RadioButton x:Name="FilterFreeRadio" GroupName="CategoryFilter"
+                         Checked="Filter_Changed" VerticalAlignment="Center" Margin="0,0,18,0"/>
+            <RadioButton x:Name="FilterOtherRadio" GroupName="CategoryFilter"
+                         Checked="Filter_Changed" VerticalAlignment="Center" Margin="0,0,18,0"/>
+        </StackPanel>
+
+        <Grid Grid.Row="2">
+            <Border BorderBrush="{StaticResource BorderBrush2}" BorderThickness="1" CornerRadius="6" Background="White">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ListBox x:Name="DocumentsListBox" BorderThickness="0" Background="Transparent"
+                             SelectionChanged="DocumentsListBox_SelectionChanged" Padding="10">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Margin" Value="6"/>
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Width="{Binding IconSize}" Margin="4">
+                                    <Border Width="{Binding IconSize}" Height="{Binding IconSize}" Background="#F4F6F8"
+                                            CornerRadius="8" BorderBrush="{StaticResource BorderBrush2}" BorderThickness="1">
+                                        <TextBlock Text="{Binding IconGlyph}" FontSize="{Binding IconFontSize}"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <TextBlock Text="{Binding DisplayName}" TextWrapping="Wrap" TextAlignment="Center"
+                                               FontSize="11.5" Margin="2,5,2,0" MaxHeight="48" TextTrimming="CharacterEllipsis"
+                                               ToolTip="{Binding DisplayName}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </ScrollViewer>
+            </Border>
+            <TextBlock x:Name="NoDocumentsText" Foreground="Gray" FontStyle="Italic"
+                       HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
+        </Grid>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <Button x:Name="OpenButton" Click="Open_Click" IsEnabled="False"/>
+            <Button x:Name="PrintButton" Click="Print_Click" IsEnabled="False"/>
+            <Button x:Name="RenameButton" Click="Rename_Click" IsEnabled="False"/>
+            <Button x:Name="DeleteButton" Click="Delete_Click" IsEnabled="False" Background="#E74C3C" Foreground="White"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

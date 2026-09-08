@@ -1,0 +1,45 @@
+<UserControl x:Class="HR_ERP.Views.EmployeesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,8">
+            <TextBlock x:Name="HeaderText" Text="Employees" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,20,0"/>
+            <TextBox x:Name="SearchBox" Width="220" VerticalAlignment="Center"/>
+            <Button x:Name="SearchButton" Content="Search" Click="Search_Click"/>
+            <Button x:Name="RefreshButton" Content="Refresh" Click="Refresh_Click"/>
+            <Label x:Name="DepartmentLabel" Content="Department:" VerticalAlignment="Center" Margin="16,4,0,0"/>
+            <ComboBox x:Name="FilterDepartmentBox" DisplayMemberPath="Name" Width="170"
+                      SelectionChanged="FilterDepartmentBox_SelectionChanged"/>
+        </StackPanel>
+
+        <!-- No expanders competing for space here anymore, so this DataGrid simply always
+             gets the full remaining height of the page - editing happens in a separate window. -->
+        <DataGrid x:Name="EmployeesGrid" Grid.Row="1" AutoGenerateColumns="False"
+                  IsReadOnly="True" SelectionChanged="EmployeesGrid_SelectionChanged"
+                  MouseDoubleClick="EmployeesGrid_MouseDoubleClick"
+                  CanUserAddRows="False" FrozenColumnCount="2">
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="ColCode" Header="Code" Binding="{Binding Code}" Width="80"/>
+                <DataGridTextColumn x:Name="ColName" Header="Name" Binding="{Binding Name}" Width="160"/>
+                <DataGridTextColumn x:Name="ColDepartment" Header="Department" Binding="{Binding Depart}" Width="140"/>
+                <DataGridTextColumn x:Name="ColPosition" Header="Position" Binding="{Binding Position}" Width="140"/>
+                <DataGridTextColumn x:Name="ColEmail" Header="Email" Binding="{Binding Email}" Width="180"/>
+                <DataGridTextColumn x:Name="ColPhone" Header="Phone" Binding="{Binding Phone}" Width="120"/>
+                <DataGridTextColumn x:Name="ColHireDate" Header="Hire Date" Binding="{Binding HireDate, StringFormat=d}" Width="100"/>
+                <DataGridTextColumn x:Name="ColStatus" Header="Status" Binding="{Binding EmploymentStatus}" Width="80"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <Button x:Name="NewButton" Content="New" Click="New_Click" Background="#2ECC71" Foreground="White"/>
+            <Button x:Name="EditButton" Content="Edit" Click="Edit_Click" IsEnabled="False" Background="#3498DB" Foreground="White"/>
+            <Button x:Name="DeleteButton" Content="Delete" Click="Delete_Click" IsEnabled="False" Background="#E74C3C" Foreground="White"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,0 +1,81 @@
+<UserControl x:Class="HR_ERP.Views.DepartmentsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Departments -->
+        <Grid Grid.Column="0" Margin="0,0,10,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="DepartmentsHeader" Text="Departments" FontSize="18" FontWeight="Bold" Margin="0,0,0,8"/>
+            <DataGrid x:Name="DepartmentsGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True"
+                      CanUserAddRows="False" SelectionChanged="DepartmentsGrid_SelectionChanged" FrozenColumnCount="2">
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:Name="DeptColCode" Header="Code" Binding="{Binding Code}" Width="70"/>
+                    <DataGridTextColumn x:Name="DeptColName" Header="Name" Binding="{Binding Name}" Width="140"/>
+                    <DataGridTextColumn x:Name="DeptColParent" Header="Parent" Binding="{Binding ParentCode}" Width="70"/>
+                    <DataGridTextColumn x:Name="DeptColType" Header="Type" Binding="{Binding Type}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <StackPanel Grid.Row="2" Margin="0,10,0,0">
+                <Label x:Name="DeptCodeLabel" Content="Code"/>
+                <TextBox x:Name="DeptCodeBox"/>
+                <Label x:Name="DeptNameLabel" Content="Department Name"/>
+                <TextBox x:Name="DeptNameBox"/>
+                <Label x:Name="DeptTypeLabel" Content="Type"/>
+                <TextBox x:Name="DeptTypeBox"/>
+                <Label x:Name="ParentDeptLabel" Content="Parent Department (leave blank = this is a main department)"/>
+                <ComboBox x:Name="ParentDeptBox" DisplayMemberPath="Name"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+                    <Button x:Name="DeptNewButton" Content="New" Click="DeptNew_Click"/>
+                    <Button x:Name="DeptSaveButton" Content="Save" Click="DeptSave_Click" Background="#2ECC71" Foreground="White"/>
+                    <Button x:Name="DeptDeleteButton" Content="Delete" Click="DeptDelete_Click" Background="#E74C3C" Foreground="White"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <!-- Job Positions -->
+        <Grid Grid.Column="1" Margin="10,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Margin="0,0,0,8">
+                <TextBlock x:Name="PositionsHeader" Text="Job Positions" FontSize="18" FontWeight="Bold"/>
+                <TextBlock x:Name="PositionsDesc" Text="Showing positions for the department selected on the left (select a department, or 'New' to see all)."
+                           FontSize="11" Foreground="Gray" FontStyle="Italic" Margin="0,2,0,0"/>
+            </StackPanel>
+            <DataGrid x:Name="PositionsGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True"
+                      CanUserAddRows="False" SelectionChanged="PositionsGrid_SelectionChanged" FrozenColumnCount="2">
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:Name="PosColCode" Header="Code" Binding="{Binding Code}" Width="70"/>
+                    <DataGridTextColumn x:Name="PosColTitle" Header="Title" Binding="{Binding Title}" Width="140"/>
+                    <DataGridTextColumn x:Name="PosColDepartment" Header="Department" Binding="{Binding Depart}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <StackPanel Grid.Row="2" Margin="0,10,0,0">
+                <Label x:Name="PosCodeLabel" Content="Code"/>
+                <TextBox x:Name="PosCodeBox"/>
+                <Label x:Name="PosTitleLabel" Content="Position Title"/>
+                <TextBox x:Name="PosTitleBox"/>
+                <Label x:Name="PosDeptLabel" Content="Department"/>
+                <ComboBox x:Name="PosDeptBox" DisplayMemberPath="Name"/>
+                <Label x:Name="PosDescLabel" Content="Job Description"/>
+                <TextBox x:Name="PosDescBox" AcceptsReturn="True" Height="50" TextWrapping="Wrap"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+                    <Button x:Name="PosNewButton" Content="New" Click="PosNew_Click"/>
+                    <Button x:Name="PosSaveButton" Content="Save" Click="PosSave_Click" Background="#2ECC71" Foreground="White"/>
+                    <Button x:Name="PosDeleteButton" Content="Delete" Click="PosDelete_Click" Background="#E74C3C" Foreground="White"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

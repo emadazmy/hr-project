@@ -1,0 +1,75 @@
+<Window x:Class="HR_ERP.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="HR ERP - Human Resources Module" MinHeight="600" MinWidth="900"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <Style x:Key="NavButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#D6DEE6"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Padding" Value="16,11"/>
+            <Setter Property="Margin" Value="10,2"/>
+            <Setter Property="FontSize" Value="13.5"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#34495E"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="215"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Left navigation (in Arabic/RTL mode, the Window's FlowDirection mirrors this
+             whole Grid, so this panel renders on the right side of the window instead —
+             no separate layout is needed for the two languages.) -->
+        <Grid Grid.Column="0" Background="#2C3E50">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Margin="18,22,16,18">
+                <TextBlock x:Name="AppTitleText" Text="HR ERP" Foreground="White" FontSize="23" FontWeight="Bold"/>
+                <TextBlock x:Name="AppSubtitleText" Text="Human Resources System" Foreground="#93A5B5" FontSize="11" Margin="0,2,0,0"/>
+                <TextBlock x:Name="CurrentUserText" Foreground="#5D7185" FontSize="11" Margin="0,6,0,0"/>
+            </StackPanel>
+
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel>
+                    <Button x:Name="NavDashboardButton" Click="NavDashboard_Click" Style="{StaticResource NavButtonStyle}"/>
+                    <Button x:Name="NavEmployeesButton" Click="NavEmployees_Click" Style="{StaticResource NavButtonStyle}"/>
+                    <Button x:Name="NavDepartmentsButton" Click="NavDepartments_Click" Style="{StaticResource NavButtonStyle}"/>
+                    <Button x:Name="NavOrgStructureButton" Click="NavOrgStructure_Click" Style="{StaticResource NavButtonStyle}"/>
+                    <Button x:Name="NavShiftsButton" Click="NavShifts_Click" Style="{StaticResource NavButtonStyle}"/>
+                    <Button x:Name="NavAttendanceButton" Click="NavAttendance_Click" Style="{StaticResource NavButtonStyle}"/>
+                    <Button x:Name="NavLeaveButton" Click="NavLeave_Click" Style="{StaticResource NavButtonStyle}"/>
+                    <Button x:Name="NavAdjustmentsButton" Click="NavAdjustments_Click" Style="{StaticResource NavButtonStyle}"/>
+                    <Button x:Name="NavCashAdvancesButton" Click="NavCashAdvances_Click" Style="{StaticResource NavButtonStyle}"/>
+                    <Button x:Name="NavPayrollButton" Click="NavPayroll_Click" Style="{StaticResource NavButtonStyle}"/>
+                    <Button x:Name="NavDocumentsButton" Click="NavDocuments_Click" Style="{StaticResource NavButtonStyle}"/>
+                    <Border Height="1" Background="#3D5266" Margin="14,8"/>
+                    <Button x:Name="NavSettingsButton" Click="NavSettings_Click" Style="{StaticResource NavButtonStyle}"/>
+                    <Button x:Name="NavSignOutButton" Click="NavSignOut_Click" Style="{StaticResource NavButtonStyle}"/>
+                </StackPanel>
+            </ScrollViewer>
+
+            <TextBlock Grid.Row="2" Text="v1.1" Foreground="#5D7185" FontSize="10" Margin="18,0,0,14"/>
+        </Grid>
+
+        <!-- Content area -->
+        <Border Grid.Column="1" Background="{StaticResource SurfaceBrush}">
+            <ContentControl x:Name="MainContent" Margin="20"/>
+        </Border>
+    </Grid>
+</Window>

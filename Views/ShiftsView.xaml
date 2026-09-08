@@ -1,0 +1,124 @@
+<UserControl x:Class="HR_ERP.Views.ShiftsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Shifts (rule-based) -->
+        <Grid Grid.Column="0" Margin="0,0,10,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="ShiftsTitleText" FontSize="18" FontWeight="Bold" Margin="0,0,0,8"/>
+            <DataGrid x:Name="ShiftsGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True"
+                      CanUserAddRows="False" SelectionChanged="ShiftsGrid_SelectionChanged" FrozenColumnCount="1">
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:Name="ColShiftName" Binding="{Binding ShiftName}" Width="110"/>
+                    <DataGridTextColumn x:Name="ColShiftStart" Binding="{Binding StartTime}" Width="80"/>
+                    <DataGridTextColumn x:Name="ColShiftEnd" Binding="{Binding EndTime}" Width="80"/>
+                    <DataGridTextColumn x:Name="ColShiftLateTol" Binding="{Binding LateToleranceMinutes}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <StackPanel Grid.Row="2" Margin="0,10,0,0">
+                <UniformGrid Columns="2">
+                    <StackPanel>
+                        <Label x:Name="ShiftNameLabel"/>
+                        <TextBox x:Name="ShiftNameBox"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <Label x:Name="ShiftHoursLabel"/>
+                        <TextBox x:Name="ShiftHoursBox"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <Label x:Name="ShiftStartLabel"/>
+                        <TextBox x:Name="ShiftStartBox"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <Label x:Name="ShiftEndLabel"/>
+                        <TextBox x:Name="ShiftEndBox"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <Label x:Name="LateTolLabel"/>
+                        <TextBox x:Name="LateTolBox" Text="0"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <Label x:Name="EarlyTolLabel"/>
+                        <TextBox x:Name="EarlyTolBox" Text="0"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <Label x:Name="OtGraceLabel"/>
+                        <TextBox x:Name="OtGraceBox" Text="0"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <Label x:Name="DetectStartLabel"/>
+                        <TextBox x:Name="DetectStartBox"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <Label x:Name="DetectEndLabel"/>
+                        <TextBox x:Name="DetectEndBox"/>
+                    </StackPanel>
+                </UniformGrid>
+                <TextBlock x:Name="DetectionNoteText"
+                           Foreground="Gray" FontStyle="Italic" FontSize="11" TextWrapping="Wrap" Margin="4,6,0,0"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+                    <Button x:Name="ShiftNewButton" Click="ShiftNew_Click"/>
+                    <Button x:Name="ShiftSaveButton" Click="ShiftSave_Click" Background="#2ECC71" Foreground="White"/>
+                    <Button x:Name="ShiftDeleteButton" Click="ShiftDelete_Click" Background="#E74C3C" Foreground="White"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <!-- WorkShifts (simple templates) -->
+        <Grid Grid.Column="1" Margin="10,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="WsTitleText" FontSize="18" FontWeight="Bold" Margin="0,0,0,8"/>
+            <DataGrid x:Name="WorkShiftsGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True"
+                      CanUserAddRows="False" SelectionChanged="WorkShiftsGrid_SelectionChanged" FrozenColumnCount="1">
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:Name="ColWsName" Binding="{Binding Name}" Width="120"/>
+                    <DataGridTextColumn x:Name="ColWsStart" Binding="{Binding StartTime}" Width="80"/>
+                    <DataGridTextColumn x:Name="ColWsEnd" Binding="{Binding EndTime}" Width="80"/>
+                    <DataGridTextColumn x:Name="ColWsTotalHrs" Binding="{Binding TotalHours}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <StackPanel Grid.Row="2" Margin="0,10,0,0">
+                <UniformGrid Columns="2">
+                    <StackPanel>
+                        <Label x:Name="WsNameLabel"/>
+                        <TextBox x:Name="WsNameBox"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <Label x:Name="WsBreakLabel"/>
+                        <TextBox x:Name="WsBreakBox" Text="0"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <Label x:Name="WsStartLabel"/>
+                        <TextBox x:Name="WsStartBox"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <Label x:Name="WsEndLabel"/>
+                        <TextBox x:Name="WsEndBox"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <Label x:Name="WsTotalHoursLabel"/>
+                        <TextBox x:Name="WsTotalHoursBox"/>
+                    </StackPanel>
+                </UniformGrid>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+                    <Button x:Name="WsNewButton" Click="WsNew_Click"/>
+                    <Button x:Name="WsSaveButton" Click="WsSave_Click" Background="#2ECC71" Foreground="White"/>
+                    <Button x:Name="WsDeleteButton" Click="WsDelete_Click" Background="#E74C3C" Foreground="White"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

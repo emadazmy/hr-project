@@ -1,0 +1,140 @@
+<UserControl x:Class="HR_ERP.Views.AttendanceView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,8">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock x:Name="HeaderText" Text="Attendance" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                <Button x:Name="ImportButton" Content="Import from Excel..." Click="ImportExcel_Click" Background="#3498DB" Foreground="White"/>
+                <Button x:Name="DownloadTemplateButton" Content="Download Template" Click="DownloadTemplate_Click"/>
+                <Button x:Name="PrintReportButton" Content="Print Report..." Click="PrintReport_Click" Background="#8E44AD" Foreground="White"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                <RadioButton x:Name="ModeByDayRadio" Content="One day, all employees" GroupName="PreviewMode"
+                             IsChecked="True" Checked="PreviewMode_Changed" VerticalAlignment="Center" Margin="0,0,16,0"/>
+                <RadioButton x:Name="ModeByEmployeeRadio" Content="One employee, date range" GroupName="PreviewMode"
+                             Checked="PreviewMode_Changed" VerticalAlignment="Center" Margin="0,0,16,0"/>
+            </StackPanel>
+
+            <!-- Mode: one day, all employees -->
+            <StackPanel x:Name="ByDayPanel" Orientation="Horizontal" Margin="0,6,0,0">
+                <Label x:Name="DateLabel" Content="Date:" VerticalAlignment="Center"/>
+                <DatePicker x:Name="DatePickerFilter" SelectedDateChanged="DatePickerFilter_SelectedDateChanged"/>
+            </StackPanel>
+
+            <!-- Mode: one employee, custom/whole-month range -->
+            <StackPanel x:Name="ByEmployeePanel" Orientation="Horizontal" Margin="0,6,0,0" Visibility="Collapsed">
+                <Label x:Name="EmployeeLabel" Content="Employee:" VerticalAlignment="Center"/>
+                <ComboBox x:Name="PreviewEmployeeBox" DisplayMemberPath="Name" Width="180"
+                          SelectionChanged="PreviewFilter_Changed"/>
+                <Label x:Name="FromLabel" Content="From:" VerticalAlignment="Center"/>
+                <DatePicker x:Name="RangeStartPicker" SelectedDateChanged="PreviewFilter_Changed"/>
+                <Label x:Name="ToLabel" Content="To:" VerticalAlignment="Center"/>
+                <DatePicker x:Name="RangeEndPicker" SelectedDateChanged="PreviewFilter_Changed"/>
+                <Button x:Name="ThisMonthButton" Content="This Month" Click="ThisMonth_Click"/>
+            </StackPanel>
+        </StackPanel>
+
+        <DataGrid x:Name="AttendanceGrid" Grid.Row="1" IsReadOnly="True" FrozenColumnCount="2"
+                  CanUserAddRows="False" SelectionChanged="AttendanceGrid_SelectionChanged">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Status1}" Value="Late">
+                            <Setter Property="Background" Value="{StaticResource StatusLateBrush}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Status1}" Value="Absent">
+                            <Setter Property="Background" Value="{StaticResource StatusAbsentBrush}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Status1}" Value="Leave">
+                            <Setter Property="Background" Value="{StaticResource StatusLeaveBrush}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Status1}" Value="Holiday">
+                            <Setter Property="Background" Value="{StaticResource StatusHolidayBrush}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Status1}" Value="Weekend">
+                            <Setter Property="Background" Value="{StaticResource StatusWeekendBrush}"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Code" Binding="{Binding EmployeeCode}" Width="80"/>
+                <DataGridTextColumn Header="Employee" Binding="{Binding Name}" Width="150"/>
+                <DataGridTextColumn Header="Date" Binding="{Binding CheckinDate, StringFormat=d}" Width="95"/>
+                <DataGridTextColumn Header="Day" Binding="{Binding DayName}" Width="90"/>
+                <DataGridTextColumn Header="Check-in" Binding="{Binding Checkin}" Width="85"/>
+                <DataGridTextColumn Header="Check-out" Binding="{Binding Checkout}" Width="85"/>
+                <DataGridTextColumn Header="Shift" Binding="{Binding ShiftName}" Width="90"/>
+                <DataGridTextColumn Header="Late (min)" Binding="{Binding MinutesLate}" Width="75"/>
+                <DataGridTextColumn Header="Early (min)" Binding="{Binding MinutesEarlyLeave}" Width="80"/>
+                <DataGridTextColumn Header="Overtime" Binding="{Binding Overtime}" Width="75"/>
+                <DataGridTextColumn Header="Total Hrs" Binding="{Binding TWHours}" Width="75"/>
+                <DataGridTextColumn Header="Status" Binding="{Binding Status1}" Width="85"/>
+                <DataGridCheckBoxColumn Header="Approved" Binding="{Binding Approved}" Width="65"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Live summary strip for whatever is currently loaded in the grid above -->
+        <Border Grid.Row="2" Background="{StaticResource BrandPrimary}" Margin="0,8,0,0" Padding="14,7" CornerRadius="5">
+            <TextBlock x:Name="SummaryText" Foreground="White" FontWeight="SemiBold" FontSize="12.5"/>
+        </Border>
+
+            <Expander x:Name="EditExpander" Grid.Row="3" Header="Add / Edit Attendance Record" IsExpanded="False" Margin="0,10,0,0">
+            <StackPanel Margin="0,10,0,0">
+                <UniformGrid Columns="5">
+                    <StackPanel><Label x:Name="EditEmployeeLabel" Content="Employee"/>
+                        <ComboBox x:Name="EmployeeBox" DisplayMemberPath="Name" SelectionChanged="EmployeeBox_SelectionChanged"/>
+                    </StackPanel>
+                    <StackPanel><Label x:Name="EditCheckinDateLabel" Content="Check-in Date"/><DatePicker x:Name="CheckinDatePicker" SelectedDateChanged="CheckinDatePicker_SelectedDateChanged"/></StackPanel>
+                    <StackPanel><Label x:Name="EditCheckinTimeLabel" Content="Check-in (HH:mm)"/><TextBox x:Name="CheckinBox" LostFocus="CheckinOrCheckout_LostFocus"/></StackPanel>
+                    <StackPanel><Label x:Name="EditCheckoutTimeLabel" Content="Check-out (HH:mm)"/><TextBox x:Name="CheckoutBox" LostFocus="CheckinOrCheckout_LostFocus"/></StackPanel>
+                    <StackPanel><Label x:Name="EditShiftLabel" Content="Shift (auto-detected)"/>
+                        <ComboBox x:Name="ShiftBox" DisplayMemberPath="ShiftName" SelectionChanged="ShiftBox_SelectionChanged"/>
+                    </StackPanel>
+                </UniformGrid>
+
+                <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                    <Button x:Name="ForceRecalculateButton" Content="Force Recalculate" Click="Recalculate_Click" Background="#16A085" Foreground="White"/>
+                    <TextBlock x:Name="AutoSaveStatusText"
+                               Text=""
+                               VerticalAlignment="Center" Foreground="Gray" FontStyle="Italic" Margin="10,0,0,0" TextWrapping="Wrap"/>
+                </StackPanel>
+
+                <UniformGrid Columns="5" Margin="0,6,0,0">
+                    <StackPanel><Label x:Name="StatusLabel" Content="Status (auto)"/>
+                        <ComboBox x:Name="StatusBox" SelectionChanged="StatusBox_SelectionChanged">
+                            <ComboBoxItem Content="Present"/>
+                            <ComboBoxItem Content="Absent"/>
+                            <ComboBoxItem Content="Late"/>
+                            <ComboBoxItem Content="Leave"/>
+                            <ComboBoxItem Content="Holiday"/>
+                            <ComboBoxItem Content="Weekend"/>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel><Label x:Name="MinutesLateLabel" Content="Minutes Late"/><TextBox x:Name="MinutesLateBox" Text="0"/></StackPanel>
+                    <StackPanel><Label x:Name="MinutesEarlyLeaveLabel" Content="Minutes Early Leave"/><TextBox x:Name="MinutesEarlyLeaveBox" Text="0"/></StackPanel>
+                    <StackPanel><Label x:Name="WorkingHoursLabel" Content="Working Hours"/><TextBox x:Name="WorkingHoursBox"/></StackPanel>
+                    <StackPanel><Label x:Name="OvertimeLabel" Content="Overtime (hrs)"/><TextBox x:Name="OvertimeBox" Text="0"/></StackPanel>
+                </UniformGrid>
+
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox x:Name="ApprovedCheck" Content="Approved" VerticalAlignment="Center" Margin="4,10,4,4"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+                    <Button x:Name="NewButton" Content="New" Click="New_Click"/>
+                    <Button x:Name="SaveButton" Content="Save (manual override)" Click="Save_Click" Background="#2ECC71" Foreground="White"/>
+                    <Button x:Name="DeleteButton" Content="Delete" Click="Delete_Click" Background="#E74C3C" Foreground="White"/>
+                </StackPanel>
+            </StackPanel>
+        </Expander>
+    </Grid>
+</UserControl>

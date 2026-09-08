@@ -1,0 +1,224 @@
+<Window x:Class="HR_ERP.Views.EmployeeDetailWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Height="740" Width="960" MinHeight="560" MinWidth="700"
+        WindowStartupLocation="CenterOwner">
+    <Grid Margin="16" Background="{StaticResource SurfaceBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock x:Name="TitleText" Grid.Row="0" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+
+        <!-- Main data — always visible regardless of which tab is open below, so the person
+             never loses sight of who they're editing (Code/Name/Department/Position/Status). -->
+        <Border Grid.Row="1" Background="White" BorderBrush="{StaticResource BorderBrush2}" BorderThickness="1"
+                CornerRadius="6" Padding="14,12" Margin="0,0,0,12">
+            <StackPanel>
+                <TextBlock x:Name="MainDataHeader" FontWeight="Bold" FontSize="13" Margin="0,0,0,8"/>
+                <UniformGrid Columns="5">
+                    <StackPanel Margin="0,0,8,0"><Label x:Name="LabelEmployeeCode"/><TextBox x:Name="CodeBox"/></StackPanel>
+                    <StackPanel Margin="0,0,8,0"><Label x:Name="LabelFullName"/><TextBox x:Name="NameBox"/></StackPanel>
+                    <StackPanel Margin="0,0,8,0"><Label x:Name="LabelDepartment"/>
+                        <ComboBox x:Name="DepartmentBox" DisplayMemberPath="Name" SelectionChanged="DepartmentBox_SelectionChanged"/>
+                    </StackPanel>
+                    <StackPanel Margin="0,0,8,0"><Label x:Name="LabelPosition"/>
+                        <ComboBox x:Name="PositionBox" DisplayMemberPath="Title"/>
+                    </StackPanel>
+                    <StackPanel><Label x:Name="LabelEmploymentStatus"/>
+                        <ComboBox x:Name="EmploymentStatusBox">
+                            <ComboBoxItem Content="Active"/>
+                            <ComboBoxItem Content="Terminated"/>
+                        </ComboBox>
+                    </StackPanel>
+                </UniformGrid>
+            </StackPanel>
+        </Border>
+
+        <TabControl x:Name="DetailTabs" Grid.Row="2">
+
+            <!-- ===================== Details tab ===================== -->
+            <TabItem x:Name="DetailsTab">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="4,10,4,10">
+                        <UniformGrid Columns="4">
+                            <StackPanel><Label x:Name="LabelGender"/>
+                                <ComboBox x:Name="GenderBox">
+                                    <ComboBoxItem Content="Male"/>
+                                    <ComboBoxItem Content="Female"/>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel><Label x:Name="LabelDob"/><DatePicker x:Name="DobPicker"/></StackPanel>
+                            <StackPanel><Label x:Name="LabelEmail"/><TextBox x:Name="EmailBox"/></StackPanel>
+                            <StackPanel><Label x:Name="LabelPhone"/><TextBox x:Name="PhoneBox"/></StackPanel>
+                        </UniformGrid>
+                        <UniformGrid Columns="4">
+                            <StackPanel><Label x:Name="LabelHireDate"/><DatePicker x:Name="HireDatePicker"/></StackPanel>
+                            <StackPanel><Label x:Name="LabelNationalId"/><TextBox x:Name="NationalIdBox"/></StackPanel>
+                            <StackPanel><Label x:Name="LabelEmploymentType"/>
+                                <ComboBox x:Name="EmploymentTypeBox">
+                                    <ComboBoxItem Content="Full-time"/>
+                                    <ComboBoxItem Content="Part-time"/>
+                                    <ComboBoxItem Content="Contract"/>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel><Label x:Name="LabelInsuranceStatus"/>
+                                <ComboBox x:Name="InsuranceStatusBox">
+                                    <ComboBoxItem Content="Insured"/>
+                                    <ComboBoxItem Content="Not Insured"/>
+                                </ComboBox>
+                            </StackPanel>
+                        </UniformGrid>
+                        <UniformGrid Columns="4">
+                            <StackPanel><Label x:Name="LabelAddress"/><TextBox x:Name="AddressBox"/></StackPanel>
+                            <StackPanel><Label x:Name="LabelWeekend1"/><TextBox x:Name="Weekend1Box"/></StackPanel>
+                            <StackPanel><Label x:Name="LabelWeekend2"/><TextBox x:Name="Weekend2Box"/></StackPanel>
+                            <StackPanel><Label x:Name="LabelMarital"/><TextBox x:Name="MaritalBox"/></StackPanel>
+                        </UniformGrid>
+                        <UniformGrid Columns="4">
+                            <StackPanel><Label x:Name="LabelAnnualLeaveDays"/><TextBox x:Name="AnnualLeaveDaysBox" Text="21"/></StackPanel>
+                            <StackPanel><Label x:Name="LabelLeaveCarriedOver"/><TextBox x:Name="LeaveCarriedOverBox" Text="0"/></StackPanel>
+                            <StackPanel><Label x:Name="LabelReportsTo"/>
+                                <ComboBox x:Name="ManagerBox" DisplayMemberPath="Name"/>
+                            </StackPanel>
+                        </UniformGrid>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- ===================== Documents tab ===================== -->
+            <TabItem x:Name="DocumentsTab">
+                <StackPanel Margin="4,10,4,10">
+                    <TextBlock x:Name="DocumentsHintText"
+                               Foreground="Gray" FontStyle="Italic" Margin="0,0,0,8"/>
+                    <TextBlock x:Name="DocumentsDescriptionText"
+                               Foreground="Gray" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,8"/>
+
+                    <DataGrid x:Name="DocumentsGrid" Height="220" IsReadOnly="True" CanUserAddRows="False"
+                              FrozenColumnCount="1" SelectionChanged="DocumentsGrid_SelectionChanged"
+                              MouseDoubleClick="DocumentsGrid_MouseDoubleClick">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn x:Name="ColDocCategory" Header="Category" Binding="{Binding DocumentType}" Width="180"/>
+                            <DataGridTextColumn x:Name="ColDocFileName" Header="File Name" Binding="{Binding FileName}" Width="200"/>
+                            <DataGridTextColumn x:Name="ColDocDescription" Header="Description" Binding="{Binding Description}" Width="*"/>
+                            <DataGridTextColumn x:Name="ColDocUploaded" Header="Uploaded" Binding="{Binding UploadedDate, StringFormat=g}" Width="140"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                        <ComboBox x:Name="DocumentTypeBox" Width="220" Margin="4" DisplayMemberPath="Display"/>
+                        <TextBox x:Name="DocumentDescriptionBox" Width="220" Margin="4"/>
+                        <Button x:Name="ImportDocumentButton" Click="ImportDocument_Click" Background="#3498DB" Foreground="White"/>
+                        <Button x:Name="ViewDocumentButton" Click="ViewDocument_Click" Background="#16A085" Foreground="White"/>
+                        <Button x:Name="DeleteDocumentButton" Click="DeleteDocument_Click" Background="#E74C3C" Foreground="White"/>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+
+            <!-- ===================== History tab ===================== -->
+            <TabItem x:Name="HistoryTab">
+                <StackPanel Margin="4,10,4,10">
+                    <TextBlock x:Name="HistoryHintText"
+                               Foreground="Gray" FontStyle="Italic" Margin="0,0,0,8"/>
+                    <TextBlock x:Name="HistoryDescriptionText"
+                               Foreground="Gray" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,8"/>
+
+                    <DataGrid x:Name="HistoryGrid" Height="200" IsReadOnly="True" CanUserAddRows="False" FrozenColumnCount="2">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn x:Name="ColHistDate" Header="Date" Binding="{Binding EventDate, StringFormat=d}" Width="90"/>
+                            <DataGridTextColumn x:Name="ColHistEvent" Header="Event" Binding="{Binding EventType}" Width="140"/>
+                            <DataGridTextColumn x:Name="ColHistChange" Header="Change" Binding="{Binding Summary}" Width="*"/>
+                            <DataGridTextColumn x:Name="ColHistNotes" Header="Notes" Binding="{Binding Notes}" Width="200"/>
+                            <DataGridTextColumn x:Name="ColHistRecorded" Header="Recorded" Binding="{Binding RecordedDate, StringFormat=g}" Width="140"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <UniformGrid Columns="4" Margin="0,8,0,0">
+                        <StackPanel><Label x:Name="HistoryEventLabel"/>
+                            <ComboBox x:Name="HistoryEventTypeBox" DisplayMemberPath="Display"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <Label x:Name="HistoryEventDateLabel"/>
+                            <DatePicker x:Name="HistoryDatePicker"/>
+                        </StackPanel>
+                        <StackPanel><Label x:Name="HistoryPerformanceLabel"/>
+                            <ComboBox x:Name="HistoryRatingBox">
+                                <ComboBoxItem Content="Excellent"/>
+                                <ComboBoxItem Content="Good"/>
+                                <ComboBoxItem Content="Average"/>
+                                <ComboBoxItem Content="Needs Improvement"/>
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel><Label x:Name="HistoryNotesLabel"/>
+                            <TextBox x:Name="HistoryNotesBox"/>
+                        </StackPanel>
+                    </UniformGrid>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+                        <Button x:Name="AddHistoryButton" Click="AddHistoryEntry_Click" Background="#2ECC71" Foreground="White"/>
+                        <Button x:Name="DeleteHistoryButton" Click="DeleteHistoryEntry_Click" Background="#E74C3C" Foreground="White"/>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+
+            <!-- ===================== Salary tab ===================== -->
+            <TabItem x:Name="SalaryTab">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="4,10,4,10">
+                        <TextBlock x:Name="SalaryHintText"
+                                   Foreground="Gray" FontStyle="Italic" Margin="0,0,0,8"/>
+
+                        <TextBlock x:Name="SalaryEntitlementsHeader" FontWeight="Bold" FontSize="13" Margin="0,4,0,6"/>
+                        <UniformGrid Columns="4">
+                            <StackPanel><Label x:Name="SalaryBasicLabel"/><TextBox x:Name="SalaryBasicBox" Text="0"/></StackPanel>
+                            <StackPanel><Label x:Name="SalaryFixedAllowanceLabel"/><TextBox x:Name="SalaryFixedAllowanceBox" Text="0"/></StackPanel>
+                            <StackPanel><Label x:Name="SalaryCompletionLabel"/><TextBox x:Name="SalaryCompletionBox" Text="0"/></StackPanel>
+                            <StackPanel><Label x:Name="SalaryOtherEntitlementsLabel"/><TextBox x:Name="SalaryOtherEntitlementsBox" Text="0"/></StackPanel>
+                        </UniformGrid>
+
+                        <TextBlock x:Name="SalaryDeductionsHeader" FontWeight="Bold" FontSize="13" Margin="0,14,0,6"/>
+                        <UniformGrid Columns="4">
+                            <StackPanel><Label x:Name="SalaryInsuranceAmountLabel"/><TextBox x:Name="SalaryInsuranceAmountBox" Text="0"/></StackPanel>
+                            <StackPanel><Label x:Name="SalaryMonthlyTaxLabel"/><TextBox x:Name="SalaryMonthlyTaxBox" Text="0"/></StackPanel>
+                        </UniformGrid>
+                        <TextBlock x:Name="SalaryInsuranceNoteText"
+                                   Foreground="Gray" FontSize="11" FontStyle="Italic" TextWrapping="Wrap" Margin="0,4,0,0"/>
+
+                        <TextBlock x:Name="SalaryRatesHeader" FontWeight="Bold" FontSize="13" Margin="0,14,0,6"/>
+                        <UniformGrid Columns="4">
+                            <StackPanel><Label x:Name="SalaryOvertimeRateLabel"/><TextBox x:Name="SalaryOvertimeRateBox" Text="0"/></StackPanel>
+                            <StackPanel><Label x:Name="SalaryLateDeductionRateLabel"/><TextBox x:Name="SalaryLateDeductionRateBox" Text="0"/></StackPanel>
+                        </UniformGrid>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                            <Button x:Name="SaveSalaryButton" Click="SaveSalary_Click" Background="#2ECC71" Foreground="White"/>
+                        </StackPanel>
+
+                        <TextBlock x:Name="SalaryHistoryHeader" FontWeight="Bold" FontSize="13" Margin="0,16,0,6"/>
+                        <DataGrid x:Name="SalaryHistoryGrid" Height="160" IsReadOnly="True" CanUserAddRows="False" FrozenColumnCount="1">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn x:Name="ColSalaryHistDate" Header="Date" Binding="{Binding RecordedDate, StringFormat=g}" Width="140"/>
+                                <DataGridTextColumn x:Name="ColSalaryHistBasic" Header="Basic Salary" Binding="{Binding BasicSalary, StringFormat=N2}" Width="90"/>
+                                <DataGridTextColumn x:Name="ColSalaryHistAllowance" Header="Fixed Allowances" Binding="{Binding FixedAllowance, StringFormat=N2}" Width="100"/>
+                                <DataGridTextColumn x:Name="ColSalaryHistCompletion" Header="Salary Completion" Binding="{Binding SalaryCompletion, StringFormat=N2}" Width="100"/>
+                                <DataGridTextColumn x:Name="ColSalaryHistOther" Header="Other Entitlements" Binding="{Binding OtherEntitlements, StringFormat=N2}" Width="110"/>
+                                <DataGridTextColumn x:Name="ColSalaryHistInsurance" Header="Social Insurance" Binding="{Binding SocialInsuranceAmount, StringFormat=N2}" Width="100"/>
+                                <DataGridTextColumn x:Name="ColSalaryHistTax" Header="Monthly Tax" Binding="{Binding MonthlyTax, StringFormat=N2}" Width="90"/>
+                                <DataGridTextColumn x:Name="ColSalaryHistInsured" Header="Insured" Binding="{Binding InsuredDisplay}" Width="70"/>
+                                <DataGridTextColumn x:Name="ColSalaryHistBy" Header="Changed By" Binding="{Binding ChangedBy}" Width="100"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+            <Button x:Name="SaveButton" Click="Save_Click" Background="#2ECC71" Foreground="White" Padding="18,7" Margin="0,0,8,0"/>
+            <Button x:Name="CloseButton" Click="Close_Click" Padding="18,7"/>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,61 @@
+<Window x:Class="HR_ERP.Views.AttendanceReportWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Height="480" Width="460" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        WindowStyle="SingleBorderWindow">
+    <Grid Margin="20" Background="{StaticResource SurfaceBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock x:Name="TitleText" Grid.Row="0" FontSize="17" FontWeight="Bold" Margin="0,0,0,14"/>
+
+        <TextBlock x:Name="ReportTypeLabel" Grid.Row="1" FontWeight="SemiBold" Margin="0,0,0,4"/>
+        <StackPanel Grid.Row="2" Margin="0,0,0,14">
+            <RadioButton x:Name="TypeDetailedRadio" GroupName="ReportType" IsChecked="True" Margin="0,2"/>
+            <RadioButton x:Name="TypeEmployeeSummaryRadio" GroupName="ReportType" Margin="0,2"/>
+            <RadioButton x:Name="TypeDepartmentSummaryRadio" GroupName="ReportType" Margin="0,2"/>
+        </StackPanel>
+
+        <TextBlock x:Name="ScopeLabel" Grid.Row="3" FontWeight="SemiBold" Margin="0,0,0,4"/>
+        <StackPanel Grid.Row="4" Margin="0,0,0,14">
+            <RadioButton x:Name="ScopeAllRadio" GroupName="Scope" IsChecked="True" Checked="Scope_Changed" Margin="0,2"/>
+            <StackPanel Orientation="Horizontal" Margin="0,2">
+                <RadioButton x:Name="ScopeEmployeeRadio" GroupName="Scope" Checked="Scope_Changed" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <ComboBox x:Name="ScopeEmployeeBox" Width="220" DisplayMemberPath="Name" IsEnabled="False"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,2">
+                <RadioButton x:Name="ScopeDepartmentRadio" GroupName="Scope" Checked="Scope_Changed" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <ComboBox x:Name="ScopeDepartmentBox" Width="220" DisplayMemberPath="Name" IsEnabled="False"/>
+            </StackPanel>
+        </StackPanel>
+
+        <TextBlock x:Name="DateRangeLabel" Grid.Row="5" FontWeight="SemiBold" Margin="0,0,0,4"/>
+        <StackPanel Grid.Row="6" Orientation="Horizontal" VerticalAlignment="Top">
+            <DatePicker x:Name="RangeStartPicker" Width="130"/>
+            <TextBlock Text=" — " VerticalAlignment="Center" Margin="6,0"/>
+            <DatePicker x:Name="RangeEndPicker" Width="130"/>
+            <Button x:Name="ThisMonthButton" Click="ThisMonth_Click" Margin="10,0,0,0"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="7" Margin="0,16,0,0">
+            <Separator Margin="0,0,0,12"/>
+            <TextBlock x:Name="OutputLabel" FontWeight="SemiBold" Margin="0,0,0,4"/>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                <RadioButton x:Name="OutputPrintRadio" GroupName="Output" IsChecked="True" Margin="0,0,20,0"/>
+                <RadioButton x:Name="OutputExcelRadio" GroupName="Output"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="GenerateButton" Click="Generate_Click" Background="{StaticResource BrandAccent}" Foreground="White" Padding="18,7" Margin="0,0,8,0"/>
+                <Button x:Name="CancelButton" Click="Cancel_Click" Padding="18,7"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
